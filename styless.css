@@ -1,0 +1,267 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Space Grotesk;
+  font-weight: 700;
+}
+
+main {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #7945ff;
+  height: 100vh;
+  gap: 36px;
+  justify-content: center;
+}
+
+#first-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.btn-vs-cpu {
+  width: 335px;
+  height: 72px;
+  color: white;
+  background-color: #fd6687;
+  border-radius: 20px;
+  border: none;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  box-shadow: 0px 10px 0px 0px #000000;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-width: 3px;
+}
+
+.btn-vs-player {
+  color: Black;
+  background-color: #ffce67;
+  border-radius: 20px;
+  border: none;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  box-shadow: 0px 10px 0px 0px #000000;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 335;
+  height: 72;
+  border-width: 3px;
+}
+
+.btn-rules {
+  background-color: white;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  border-radius: 20px;
+  border: none;
+
+  box-shadow: 0px 10px 0px 0px #000000;
+  width: 335px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-width: 3px;
+  padding: 10px;
+}
+
+#game-interface {
+  display: none;
+  background-color: #7945ff;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 14px;
+  gap: 50px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+}
+
+#menu {
+  background-color: #5c2dd5;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+  border: none;
+  padding: 9px 31px;
+  border-radius: 20px;
+}
+
+#restart {
+  background-color: #5c2dd5;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+  border: none;
+  padding: 9px 31px;
+  border-radius: 20px;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 21px;
+}
+
+.player-info-player-one {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  background: white;
+  padding: -5px;
+  border-radius: 20px;
+  box-shadow: 0px 10px 0px 0px #000000;
+  padding: -7px;
+}
+
+.player-avatar {
+  transform: translate(-22px, 0px);
+}
+
+.player-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 11px;
+  gap: 5px;
+  transform: translate(-2px, 3px);
+}
+
+.player-name {
+  font-family: Space Grotesk;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.player-score {
+  font-family: Space Grotesk;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.player-info-player-two {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: white;
+  padding: -5px;
+  border-radius: 20px;
+  box-shadow: 0px 10px 0px 0px #000000;
+  padding: -7px;
+}
+
+.player-avatar-two {
+  transform: translate(24px, 1px);
+}
+
+.board {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  transform: translate(0px, -75px);
+}
+
+.turn-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  color: white;
+  transform: translate(-2px, -111px);
+}
+
+.player-turn {
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.timer {
+  font-size: 56px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.rules {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background: white;
+  box-shadow: 0px 10px 0px 0px #000000;
+  padding: 82px;
+  gap: 25px;
+  width: 480px;
+  height: 537px;
+  border-radius: 40px;
+  border-width: 3px;
+}
+
+.rules-title {
+  font-size: 56px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.rules-heading {
+  align-self: start;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  color: #7945ff;
+}
+
+.rules-text {
+  font-family: Space Grotesk;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  color: #000000;
+}
+
+.rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: Space Grotesk;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  color: #000000;
+}
