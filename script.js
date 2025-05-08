@@ -6,6 +6,9 @@ const mainPage = document.getElementById("main");
 const buttonRules = document.getElementById("btn-rules");
 const gameRules = document.getElementById("rules");
 const checkButton = document.getElementById("check-button");
+const playerTurn = document.getElementById("player-turn");
+const playerOneBackground = document.getElementById("turn-background-red");
+const playerTwoBackground = document.getElementById("turn-background-yellow");
 
 buttonVsPlayer.addEventListener("click", () => {
   gameInterFace.style.display = "block";
@@ -13,6 +16,7 @@ buttonVsPlayer.addEventListener("click", () => {
   firstPageOfGame.style.display = "none";
   logoOne.style.display = "none";
   startTurnTimer();
+  updatePlayerTurnText();
 });
 
 buttonRules.addEventListener("click", () => {
@@ -104,6 +108,7 @@ boardSection.addEventListener("click", (e) => {
 
       currentPlayer = currentPlayer === "red" ? "yellow" : "red";
       startTurnTimer();
+      updatePlayerTurnText();
       break;
     }
   }
@@ -132,6 +137,18 @@ function startTurnTimer() {
       clearInterval(timerInterval);
     }
   }, 1000);
+}
+
+function updatePlayerTurnText() {
+  if (currentPlayer === "red") {
+    playerTurn.textContent = "PLAYER 1’S TURN";
+    playerOneBackground.style.display = "block";
+    playerTwoBackground.style.display = "none";
+  } else {
+    playerTurn.textContent = "PLAYER 2’S TURN";
+    playerOneBackground.style.display = "none";
+    playerTwoBackground.style.display = "block";
+  }
 }
 
 function checkWinner(row, col, player) {
