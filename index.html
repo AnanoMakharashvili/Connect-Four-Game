@@ -32,33 +32,42 @@
             <img src="assets/images/player-one.svg" class="player-avatar" />
             <div class="player-details">
               <span class="player-name">PLAYER 1</span>
-              <span class="player-score">12</span>
+              <span class="player-score-p1" id="player-score-p1">12</span>
             </div>
           </div>
           <div class="player-info-player-two">
             <div class="player-details">
               <span class="player-name">PLAYER 2</span>
-              <span class="player-score">23</span>
+              <span class="player-score-p2" id="player-score-p2">23</span>
             </div>
             <img src="assets/images/player-two.svg" class="player-avatar-two" />
           </div>
         </div>
 
-        <img
-          src="assets/images/board-layer-white-small.svg"
-          class="board-image"
-        />
-        <div class="board">
+        <div class="board-section" id="board-section">
+          <img
+            src="assets/images/board-layer-black-small.svg"
+            rel="board-image"
+            class="board-base"
+          />
+          <img
+            src="assets/images/board-layer-white-small.svg"
+            rel="board-image"
+            id="board-image"
+          />
+        </div>
+        <div class="turn-section">
           <img
             src="assets/images/turn-background-red.svg"
             class="turn-background"
           />
-          <div class="turn-info">
+          <div class="turn-info" id="turn-info">
             <span class="player-turn">PLAYER 1’S TURN</span>
-            <span class="timer">15s</span>
+            <span class="timer" id="timer">15s</span>
           </div>
         </div>
       </div>
+
       <div class="rules" id="rules">
         <h1 class="rules-title">RULES</h1>
         <span class="rules-heading">OBJECTIVE</span>
