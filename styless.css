@@ -104,7 +104,6 @@ main {
   background-color: #7945ff;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
   padding: 14px;
   gap: 50px;
 }
