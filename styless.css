@@ -18,7 +18,7 @@ main {
   background-color: #7945ff;
   height: 100vh;
   gap: 36px;
-  justify-content: center;
+  padding: 23px;
 }
 
 #first-page {
@@ -26,6 +26,7 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 30px;
+  padding: 150px;
 }
 
 .btn-vs-cpu {
@@ -209,20 +210,6 @@ main {
   transform: translate(24px, 1px);
 }
 
-/* .board-section {
-  display: grid;
-  place-items: center;
-}
-
-.board-base {
-  grid-area: 1 / 1;
-} */
-
-/* #board-image {
-  grid-area: 1 / 1;
-  transform: translate(1px, -5px);
-} */
-
 #red-small {
   transform: translate(2px, -76px);
 }
@@ -232,10 +219,14 @@ main {
 }
 
 .turn-section {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
   display: flex;
   align-items: center;
   flex-direction: column;
-  transform: translate(0px, -20px);
 }
 
 .turn-info {
@@ -244,7 +235,15 @@ main {
   align-items: center;
   gap: 7px;
   color: white;
-  transform: translate(-2px, -111px);
+  transform: translate(-2px, 340px);
+}
+
+.turn-background-red {
+  transform: translate(1px, 454px);
+}
+
+#turn-background-yellow {
+  transform: translate(1px, 454px);
 }
 
 .player-turn {
