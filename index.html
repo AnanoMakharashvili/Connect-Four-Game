@@ -27,6 +27,14 @@
           <img src="assets/images/logo.svg" />
           <button id="restart">RESTART</button>
         </div>
+        <div id="modal" class="modal">
+          <div class="modal-content">
+            <span class="pause-text">PAUSE</span>
+            <button id="continueGame" class="modal-btn">CONTINUE GAME</button>
+            <button id="restartGame" class="modal-btn">RESTART</button>
+            <button id="quitGame" class="modal-btn">QUIT GAME</button>
+          </div>
+        </div>
         <div class="game-container">
           <div class="player-info-player-one">
             <img src="assets/images/player-one.svg" class="player-avatar" />
@@ -43,7 +51,14 @@
             <img src="assets/images/player-two.svg" class="player-avatar-two" />
           </div>
         </div>
+
         <div class="turn-section">
+          <div id="win-section">
+            <span id="win-player">PLAYER 1</span>
+
+            <span class="win-style">WINS</span>
+            <button id="play-again-style">PLAY AGAIN</button>
+          </div>
           <img
             src="assets/images/turn-background-red.svg"
             rel="turn-background-red"

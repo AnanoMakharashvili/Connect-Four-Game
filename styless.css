@@ -144,6 +144,54 @@ main {
   border-radius: 20px;
 }
 
+#modal {
+  width: 335px;
+  height: 437px;
+  border-radius: 40px;
+  border: 3px solid #000;
+  box-shadow: 0px 10px 0px 0px #000000;
+  background-color: #7945ff;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 41px;
+  padding: 17px;
+  color: #fff;
+}
+
+.modal-btn {
+  padding: 21px 55px;
+  font-size: 23px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+  border: none;
+  box-shadow: 0px 10px 0px 0px #000000;
+  border-radius: 20px;
+}
+
+.pause-text {
+  font-size: 56px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+  font-style: bold;
+  color: #ffffff;
+}
+
+#quitGame {
+  background-color: #fd6687;
+  color: white;
+}
 .game-container {
   display: flex;
   flex-direction: row;
@@ -155,7 +203,6 @@ main {
   display: flex;
   flex-direction: row;
   align-items: center;
-
   background: white;
   padding: -5px;
   border-radius: 20px;
@@ -255,6 +302,45 @@ main {
   line-height: 100%;
   letter-spacing: 0px;
   text-align: center;
+}
+
+#win-section {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 33px 73px;
+  background-color: #ffffff;
+  box-shadow: 0px 10px 0px 0px #000000;
+  border-radius: 20px;
+  gap: 6px;
+  transform: translate(1px, 439px);
+}
+
+#win-player {
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+.win-style {
+  font-style: bold;
+  font-size: 56px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+
+#play-again-style {
+  padding: 9px 21px;
+  background-color: #5c2dd5;
+  color: white;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+  border-radius: 8px;
+  border: none;
 }
 
 .timer {

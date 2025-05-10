@@ -9,6 +9,16 @@ const checkButton = document.getElementById("check-button");
 const playerTurn = document.getElementById("player-turn");
 const playerOneBackground = document.getElementById("turn-background-red");
 const playerTwoBackground = document.getElementById("turn-background-yellow");
+const timerSection = document.getElementById("timer");
+const winnerContainer = document.getElementById("win-section");
+const winPlayer = document.getElementById("win-player");
+const playAgainBtn = document.getElementById("play-again-style");
+const menu = document.getElementById("menu");
+const modalContent = document.getElementById("modal");
+
+playAgainBtn.addEventListener("click", () => {
+  resetBoard();
+});
 
 buttonVsPlayer.addEventListener("click", () => {
   gameInterFace.style.display = "block";
@@ -37,6 +47,10 @@ checkButton.addEventListener("click", () => {
   firstPageOfGame.style.display = "flex";
   firstPageOfGame.style.gap = "30px";
   logoOne.style.display = "block";
+});
+
+menu.addEventListener("click", () => {
+  modalContent.style.display = "flex";
 });
 
 const cols = 7;
@@ -96,15 +110,18 @@ boardSection.addEventListener("click", (e) => {
         }
 
         setTimeout(() => {
-          alert(`${currentPlayer.toUpperCase()} wins!`);
-          resetBoard();
+          playerTurn.style.display = "none";
+          playerOneBackground.style.display = "none";
+          playerTwoBackground.style.display = "none";
+          timerSection.style.display = "none";
+
+          winPlayer.textContent =
+            currentPlayer === "red" ? "PLAYER 1" : "PLAYER 2";
+          winnerContainer.style.display = "flex";
         }, 100);
+
         return;
       }
-
-      console.log(
-        `Switching to player: ${currentPlayer === "red" ? "yellow" : "red"}`
-      );
 
       currentPlayer = currentPlayer === "red" ? "yellow" : "red";
       startTurnTimer();
@@ -197,5 +214,12 @@ function resetBoard() {
   tokens.forEach((token) => token.remove());
 
   currentPlayer = "red";
+
+  playerTurn.style.display = "block";
+  timerSection.style.display = "block";
+  updatePlayerTurnText();
+
+  winnerContainer.style.display = "none";
+
   startTurnTimer();
 }
