@@ -19,6 +19,9 @@ const continueGameBtn = document.getElementById("continueGame");
 const restartGameBtn = document.getElementById("restartGame");
 const quitGameBtn = document.getElementById("quitGame");
 const restart = document.getElementById("restart");
+const bottomBg = document.getElementById("bottom-bg");
+const footerBg = document.getElementById("main-footer-bg");
+const customBg = document.getElementById("custom-bottom-bg");
 
 playAgainBtn.addEventListener("click", () => {
   resetBoard();
@@ -30,6 +33,7 @@ buttonVsPlayer.addEventListener("click", () => {
   firstPageOfGame.style.display = "none";
   logoOne.style.display = "none";
   modalContent.style.display = "none";
+  bottomBg.style.display = "block";
   startTurnTimer();
   updatePlayerTurnText();
 });
@@ -88,6 +92,7 @@ quitGameBtn.addEventListener("click", () => {
   firstPageOfGame.style.display = "flex";
   logoOne.style.display = "block";
   gameInterFace.style.display = "none";
+  resetBoard();
 });
 
 const cols = 7;
@@ -141,9 +146,15 @@ boardSection.addEventListener("click", (e) => {
         if (currentPlayer === "red") {
           redWins++;
           playerScoreOne.textContent = redWins;
+          bottomBg.style.display = "none";
+          footerBg.style.display = "none";
+          customBg.style.display = "block";
         } else {
           yellowWins++;
           playerScoreTwo.textContent = yellowWins;
+          bottomBg.style.display = "none";
+          footerBg.style.display = "block";
+          customBg.style.display = "none";
         }
 
         setTimeout(() => {
@@ -257,6 +268,31 @@ function resetBoard() {
   updatePlayerTurnText();
 
   winnerContainer.style.display = "none";
+
+  startTurnTimer();
+}
+
+function resetBoard() {
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      boardState[row][col] = null;
+    }
+  }
+
+  const tokens = document.querySelectorAll(".token");
+  tokens.forEach((token) => token.remove());
+
+  currentPlayer = "red";
+
+  playerTurn.style.display = "block";
+  timerSection.style.display = "block";
+  updatePlayerTurnText();
+
+  winnerContainer.style.display = "none";
+
+  bottomBg.style.display = "none";
+  footerBg.style.display = "none";
+  customBg.style.display = "none";
 
   startTurnTimer();
 }
