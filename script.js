@@ -15,6 +15,10 @@ const winPlayer = document.getElementById("win-player");
 const playAgainBtn = document.getElementById("play-again-style");
 const menu = document.getElementById("menu");
 const modalContent = document.getElementById("modal");
+const continueGameBtn = document.getElementById("continueGame");
+const restartGameBtn = document.getElementById("restartGame");
+const quitGameBtn = document.getElementById("quitGame");
+const restart = document.getElementById("restart");
 
 playAgainBtn.addEventListener("click", () => {
   resetBoard();
@@ -25,6 +29,7 @@ buttonVsPlayer.addEventListener("click", () => {
   gameInterFace.style.display = "flex";
   firstPageOfGame.style.display = "none";
   logoOne.style.display = "none";
+  modalContent.style.display = "none";
   startTurnTimer();
   updatePlayerTurnText();
 });
@@ -47,10 +52,42 @@ checkButton.addEventListener("click", () => {
   firstPageOfGame.style.display = "flex";
   firstPageOfGame.style.gap = "30px";
   logoOne.style.display = "block";
+  modalContent.style.display = "none";
 });
 
 menu.addEventListener("click", () => {
   modalContent.style.display = "flex";
+});
+
+continueGameBtn.addEventListener("click", () => {
+  modalContent.style.display = "none";
+});
+
+restartGameBtn.addEventListener("click", () => {
+  gameInterFace.style.display = "flex";
+  modalContent.style.display = "none";
+  redWins = 0;
+  yellowWins = 0;
+  playerScoreOne.textContent = "0";
+  playerScoreTwo.textContent = "0";
+  resetBoard();
+});
+
+restart.addEventListener("click", () => {
+  gameInterFace.style.display = "flex";
+  modalContent.style.display = "none";
+  resetBoard();
+  redWins = 0;
+  yellowWins = 0;
+  playerScoreOne.textContent = "0";
+  playerScoreTwo.textContent = "0";
+});
+
+quitGameBtn.addEventListener("click", () => {
+  firstPageOfGame.style.display = "block";
+  firstPageOfGame.style.display = "flex";
+  logoOne.style.display = "block";
+  gameInterFace.style.display = "none";
 });
 
 const cols = 7;

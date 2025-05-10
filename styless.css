@@ -188,9 +188,14 @@ main {
   color: #ffffff;
 }
 
+#restartGame {
+  padding: 23px 99px;
+}
+
 #quitGame {
   background-color: #fd6687;
   color: white;
+  padding: 23px 86px;
 }
 .game-container {
   display: flex;
@@ -363,6 +368,7 @@ main {
   height: 537px;
   border-radius: 40px;
   border-width: 3px;
+  transform: translate(10px, 150px);
 }
 
 .rules-title {
