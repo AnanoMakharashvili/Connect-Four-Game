@@ -20,6 +20,10 @@ main {
   gap: 36px;
 }
 
+#logo-one {
+  transform: translate(10px, 127px);
+}
+
 #first-page {
   display: flex;
   flex-direction: column;
@@ -234,15 +238,15 @@ main {
   align-items: center;
   gap: 7px;
   color: white;
-  transform: translate(-2px, 340px);
+  transform: translate(-2px, 329px);
 }
 
 .turn-background-red {
-  transform: translate(1px, 454px);
+  transform: translate(1px, 439px);
 }
 
 #turn-background-yellow {
-  transform: translate(1px, 454px);
+  transform: translate(1px, 439px);
 }
 
 .player-turn {
