@@ -217,6 +217,7 @@ function updatePlayerTurnText() {
 }
 
 function checkWinner(row, col, player) {
+  playerTwoBackground.style.display = "none";
   return (
     checkDirection(row, col, player, 0, 1) +
       checkDirection(row, col, player, 0, -1) >
