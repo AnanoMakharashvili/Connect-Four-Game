@@ -419,6 +419,7 @@ main {
 #red-small,
 #yellow-small {
   position: absolute;
+  display: block;
 }
 
 .token {
@@ -440,6 +441,14 @@ main {
 
 #board-image {
   z-index: 3;
+}
+
+.board-image-large {
+  display: none;
+}
+
+.board-layer-white-large {
+  display: none;
 }
 
 #main-footer-bg {
@@ -475,4 +484,37 @@ main {
   width: 100%;
   height: 40%;
   display: none;
+}
+
+@media (min-width: 1024px) {
+  .header {
+    gap: 204px;
+  }
+  .board-base {
+    display: none;
+  }
+
+  #board-image {
+    display: none;
+  }
+
+  .board-image-large {
+    display: block;
+  }
+
+  .board-layer-white-large {
+    display: block;
+  }
+
+  .turn-background-red {
+    transform: translate(1px, 607px);
+  }
+
+  .turn-info {
+    transform: translate(-2px, 484px);
+  }
+
+  #turn-background-yellow {
+    transform: translate(1px, 607px);
+  }
 }

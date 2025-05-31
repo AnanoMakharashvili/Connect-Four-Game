@@ -22,9 +22,24 @@ const restart = document.getElementById("restart");
 const bottomBg = document.getElementById("bottom-bg");
 const footerBg = document.getElementById("main-footer-bg");
 const customBg = document.getElementById("custom-bottom-bg");
+const cpuGameButton = document.getElementById("btn-vs-cpu");
+
+let isVsCPU = false;
 
 playAgainBtn.addEventListener("click", () => {
   resetBoard();
+});
+
+cpuGameButton.addEventListener("click", () => {
+  gameInterFace.style.display = "block";
+  gameInterFace.style.display = "flex";
+  firstPageOfGame.style.display = "none";
+  logoOne.style.display = "none";
+  modalContent.style.display = "none";
+  bottomBg.style.display = "block";
+  startTurnTimer();
+  updatePlayerTurnText();
+  isVsCPU = true;
 });
 
 buttonVsPlayer.addEventListener("click", () => {
@@ -36,6 +51,7 @@ buttonVsPlayer.addEventListener("click", () => {
   bottomBg.style.display = "block";
   startTurnTimer();
   updatePlayerTurnText();
+  isVsCPU = false;
 });
 
 buttonRules.addEventListener("click", () => {
@@ -102,7 +118,6 @@ let currentPlayer = "red";
 
 const boardState = Array.from({ length: rows }, () => Array(cols).fill(null));
 const boardSection = document.getElementById("board-section");
-
 const playerScoreOne = document.getElementById("player-score-p1");
 const playerScoreTwo = document.getElementById("player-score-p2");
 
@@ -174,6 +189,9 @@ boardSection.addEventListener("click", (e) => {
       currentPlayer = currentPlayer === "red" ? "yellow" : "red";
       startTurnTimer();
       updatePlayerTurnText();
+      if (isVsCPU && currentPlayer === "yellow") {
+        setTimeout(makeCpuMove, 500);
+      }
       break;
     }
   }
@@ -296,4 +314,67 @@ function resetBoard() {
   customBg.style.display = "none";
 
   startTurnTimer();
+}
+
+function makeCpuMove() {
+  const availableCols = [];
+
+  for (let col = 0; col < cols; col++) {
+    if (boardState[0][col] === null) {
+      availableCols.push(col);
+    }
+  }
+
+  if (availableCols.length === 0) return;
+
+  const randomCol =
+    availableCols[Math.floor(Math.random() * availableCols.length)];
+
+  for (let row = rows - 1; row >= 0; row--) {
+    if (!boardState[row][randomCol]) {
+      boardState[row][randomCol] = currentPlayer;
+
+      const token = document.createElement("img");
+      token.src = `assets/images/counter-${currentPlayer}-small.svg`;
+      token.classList.add("token");
+
+      const xOffset = (boardSection.clientWidth - cols * cellSize) / 2;
+      const yOffset = (boardSection.clientHeight - rows * cellSize) / 2;
+
+      token.style.left = `${randomCol * cellSize + xOffset}px`;
+      token.style.top = `${row * cellSize + yOffset}px`;
+
+      const topLayer = document.getElementById("board-image");
+      boardSection.insertBefore(token, topLayer);
+
+      if (checkWinner(row, randomCol, currentPlayer)) {
+        clearInterval(timerInterval);
+
+        if (currentPlayer === "red") {
+          redWins++;
+          playerScoreOne.textContent = "0";
+        } else {
+          yellowWins++;
+          playerScoreTwo.textContent = "0";
+        }
+
+        setTimeout(() => {
+          playerTurn.style.display = "none";
+          playerOneBackground.style.display = "none";
+          playerTwoBackground.style.display = "none";
+          timerSection.style.display = "none";
+
+          winPlayer.textContent = currentPlayer === "red" ? "PLAYER 1" : "CPU";
+          winnerContainer.style.display = "flex";
+        }, 100);
+        return;
+      }
+
+      currentPlayer = currentPlayer === "red" ? "yellow" : "red";
+      startTurnTimer();
+      updatePlayerTurnText();
+
+      break;
+    }
+  }
 }
