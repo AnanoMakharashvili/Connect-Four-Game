@@ -117,6 +117,7 @@ const cellSize = 48;
 let currentPlayer = "red";
 
 const boardState = Array.from({ length: rows }, () => Array(cols).fill(null));
+const boardLarge = document.getElementById("large-boards");
 const boardSection = document.getElementById("board-section");
 const playerScoreOne = document.getElementById("player-score-p1");
 const playerScoreTwo = document.getElementById("player-score-p2");
