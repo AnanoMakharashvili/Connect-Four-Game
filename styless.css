@@ -291,15 +291,15 @@ main {
   align-items: center;
   gap: 7px;
   color: white;
-  transform: translate(-2px, 329px);
+  transform: translate(-2px, 355px);
 }
 
 .turn-background-red {
-  transform: translate(1px, 439px);
+  transform: translate(1px, 477px);
 }
 
 #turn-background-yellow {
-  transform: translate(1px, 439px);
+  transform: translate(1px, 474px);
 }
 
 .player-turn {
@@ -490,6 +490,15 @@ main {
   .header {
     gap: 204px;
   }
+
+  .game-container {
+    gap: 753px;
+  }
+
+  .large-boards {
+    transform: translate(10px, -106px);
+  }
+
   .board-base {
     display: none;
   }
@@ -504,6 +513,7 @@ main {
 
   .board-layer-white-large {
     display: block;
+    transform: translate(0px, -591px);
   }
 
   .turn-background-red {
