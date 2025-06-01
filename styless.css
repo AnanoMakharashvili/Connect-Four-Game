@@ -219,7 +219,16 @@ main {
   transform: translate(-22px, 0px);
 }
 
-.player-details {
+.player-details-one {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 11px;
+  gap: 5px;
+  transform: translate(-2px, 3px);
+}
+
+.player-details-two {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -495,8 +504,48 @@ main {
     gap: 753px;
   }
 
+  .player-details-one {
+    transform: translate(-36px, 7px);
+  }
+
+  .player-details-two {
+    transform: translate(25px, 5px);
+  }
+
+  .player-avatar {
+    transform: translate(36px, -84px);
+  }
+
+  .player-info-player-one {
+    width: 141;
+    height: 160;
+    transform: translate(10px, 150px);
+  }
+
+  .player-info-player-two {
+    width: 141;
+    height: 160;
+    transform: translate(10px, 150px);
+  }
+
+  .player-name {
+    font-size: 20px;
+  }
+
+  .player-avatar-two {
+    transform: translate(-46px, -94px);
+  }
+
+  .player-score-p1 {
+    font-size: 56px;
+  }
+
+  .player-score-p2 {
+    font-size: 56px;
+  }
+
   .large-boards {
-    transform: translate(10px, -106px);
+    transform: translate(10px, -162px);
   }
 
   .board-base {
