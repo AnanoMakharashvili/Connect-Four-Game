@@ -117,7 +117,6 @@ const cellSize = 48;
 let currentPlayer = "red";
 
 const boardState = Array.from({ length: rows }, () => Array(cols).fill(null));
-const boardLarge = document.getElementById("large-boards");
 const boardSection = document.getElementById("board-section");
 const playerScoreOne = document.getElementById("player-score-p1");
 const playerScoreTwo = document.getElementById("player-score-p2");
@@ -379,3 +378,41 @@ function makeCpuMove() {
     }
   }
 }
+
+const largeCellSize = 96;
+
+const largeBoardState = Array.from({ length: rows }, () =>
+  Array(cols).fill(null)
+);
+const largeBoards = document.getElementById("large-boards");
+
+largeBoards.addEventListener("click", (e) => {
+  const rect = largeBoards.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const clickedCol = Math.floor(clickX / largeCellSize);
+
+  if (clickedCol < 0 || clickedCol >= cols) return;
+
+  for (let row = rows - 1; row >= 0; row--) {
+    if (!largeBoardState[row][clickedCol]) {
+      largeBoardState[row][clickedCol] = currentPlayer;
+
+      const token = document.createElement("img");
+      token.src =
+        currentPlayer === "red"
+          ? "assets/images/counter-red-large.svg"
+          : "assets/images/counter-yellow-large.svg";
+      token.classList.add("token-large");
+      token.style.position = "absolute";
+
+      token.style.left = `${clickedCol * largeCellSize}px`;
+      token.style.top = `${row * largeCellSize}px`;
+
+      const topLayer = document.getElementById("board-image-large");
+      largeBoards.insertBefore(token, topLayer);
+
+      currentPlayer = currentPlayer === "red" ? "yellow" : "red";
+      break;
+    }
+  }
+});
