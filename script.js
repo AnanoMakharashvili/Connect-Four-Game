@@ -23,11 +23,15 @@ const bottomBg = document.getElementById("bottom-bg");
 const footerBg = document.getElementById("main-footer-bg");
 const customBg = document.getElementById("custom-bottom-bg");
 const cpuGameButton = document.getElementById("btn-vs-cpu");
+const boardSection = document.getElementById("board-section");
+const playerScoreOne = document.getElementById("player-score-p1");
+const playerScoreTwo = document.getElementById("player-score-p2");
 
 let isVsCPU = false;
 
 playAgainBtn.addEventListener("click", () => {
   resetBoard();
+  resetLargeBoard();
 });
 
 cpuGameButton.addEventListener("click", () => {
@@ -91,12 +95,14 @@ restartGameBtn.addEventListener("click", () => {
   playerScoreOne.textContent = "0";
   playerScoreTwo.textContent = "0";
   resetBoard();
+  resetLargeBoard();
 });
 
 restart.addEventListener("click", () => {
   gameInterFace.style.display = "flex";
   modalContent.style.display = "none";
   resetBoard();
+  resetLargeBoard();
   redWins = 0;
   yellowWins = 0;
   playerScoreOne.textContent = "0";
@@ -109,6 +115,7 @@ quitGameBtn.addEventListener("click", () => {
   logoOne.style.display = "block";
   gameInterFace.style.display = "none";
   resetBoard();
+  resetLargeBoard();
 });
 
 const cols = 7;
@@ -117,9 +124,6 @@ const cellSize = 48;
 let currentPlayer = "red";
 
 const boardState = Array.from({ length: rows }, () => Array(cols).fill(null));
-const boardSection = document.getElementById("board-section");
-const playerScoreOne = document.getElementById("player-score-p1");
-const playerScoreTwo = document.getElementById("player-score-p2");
 
 let redWins = 0;
 let yellowWins = 0;
@@ -153,6 +157,7 @@ boardSection.addEventListener("click", (e) => {
       );
 
       const topLayer = document.getElementById("board-image");
+
       boardSection.insertBefore(token, topLayer);
 
       if (checkWinner(row, clickedCol, currentPlayer)) {
@@ -379,6 +384,58 @@ function makeCpuMove() {
   }
 }
 
+// const largeCellSize = 96;
+
+// const largeBoardState = Array.from({ length: rows }, () =>
+//   Array(cols).fill(null)
+// );
+// const largeBoards = document.getElementById("large-boards");
+
+// largeBoards.addEventListener("click", (e) => {
+//   const rect = largeBoards.getBoundingClientRect();
+//   const clickX = e.clientX - rect.left;
+//   const clickedCol = Math.floor(clickX / largeCellSize);
+
+//   if (clickedCol < 0 || clickedCol >= cols) return;
+
+//   for (let row = rows - 1; row >= 0; row--) {
+//     if (!largeBoardState[row][clickedCol]) {
+//       largeBoardState[row][clickedCol] = currentPlayer;
+
+//       const token = document.createElement("img");
+//       token.src =
+//         currentPlayer === "red"
+//           ? "assets/images/counter-red-large.svg"
+//           : "assets/images/counter-yellow-large.svg";
+//       token.classList.add("token-large");
+//       token.style.position = "absolute";
+
+//       token.style.left = `${clickedCol * largeCellSize}px`;
+//       token.style.top = `${row * largeCellSize}px`;
+
+//       const topLayer = document.getElementById("board-image-large");
+//       largeBoards.insertBefore(token, topLayer);
+
+//       currentPlayer = currentPlayer === "red" ? "yellow" : "red";
+//       updatePlayerTurnText();
+//       startTurnTimer();
+
+//       break;
+//     }
+//   }
+// });
+
+// function resetLargeBoard() {
+//   for (let row = 0; row < rows; row++) {
+//     for (let col = 0; col < cols; col++) {
+//       largeBoardState[row][col] = null;
+//     }
+//   }
+
+//   const largeTokens = largeBoards.querySelectorAll(".token-large");
+//   largeTokens.forEach((token) => token.remove());
+// }
+
 const largeCellSize = 96;
 
 const largeBoardState = Array.from({ length: rows }, () =>
@@ -404,15 +461,110 @@ largeBoards.addEventListener("click", (e) => {
           : "assets/images/counter-yellow-large.svg";
       token.classList.add("token-large");
       token.style.position = "absolute";
-
       token.style.left = `${clickedCol * largeCellSize}px`;
       token.style.top = `${row * largeCellSize}px`;
 
       const topLayer = document.getElementById("board-image-large");
       largeBoards.insertBefore(token, topLayer);
 
+      if (checkLargeWinner(row, clickedCol, currentPlayer)) {
+        clearInterval(timerInterval);
+
+        if (currentPlayer === "red") {
+          redWins++;
+          playerScoreOne.textContent = redWins;
+        } else {
+          yellowWins++;
+          playerScoreTwo.textContent = yellowWins;
+        }
+
+        setTimeout(() => {
+          playerTurn.style.display = "none";
+          playerOneBackground.style.display = "none";
+          playerTwoBackground.style.display = "none";
+          timerSection.style.display = "none";
+
+          winPlayer.textContent =
+            currentPlayer === "red" ? "PLAYER 1" : "PLAYER 2";
+          winnerContainer.style.display = "flex";
+        }, 100);
+        return;
+      }
+
+      if (checkLargeWinner(row, clickedCol, currentPlayer)) {
+        clearInterval(timerInterval);
+
+        setTimeout(() => {
+          playerTurn.style.display = "none";
+          playerOneBackground.style.display = "none";
+          playerTwoBackground.style.display = "none";
+          timerSection.style.display = "none";
+
+          winPlayer.textContent =
+            currentPlayer === "red" ? "PLAYER 1" : "PLAYER 2";
+          winnerContainer.style.display = "flex";
+        }, 100);
+        return;
+      }
+
       currentPlayer = currentPlayer === "red" ? "yellow" : "red";
+      updatePlayerTurnText();
+      startTurnTimer();
+
       break;
     }
   }
 });
+
+function checkLargeWinner(row, col, player) {
+  return (
+    checkLargeDirection(row, col, player, 0, 1) +
+      checkLargeDirection(row, col, player, 0, -1) >
+      2 ||
+    checkLargeDirection(row, col, player, 1, 0) > 2 ||
+    checkLargeDirection(row, col, player, 1, 1) +
+      checkLargeDirection(row, col, player, -1, -1) >
+      2 ||
+    checkLargeDirection(row, col, player, 1, -1) +
+      checkLargeDirection(row, col, player, -1, 1) >
+      2
+  );
+}
+
+function checkLargeDirection(row, col, player, rowDir, colDir) {
+  let count = 0;
+  let r = row + rowDir;
+  let c = col + colDir;
+
+  while (
+    r >= 0 &&
+    r < rows &&
+    c >= 0 &&
+    c < cols &&
+    largeBoardState[r][c] === player
+  ) {
+    count++;
+    r += rowDir;
+    c += colDir;
+  }
+
+  return count;
+}
+
+function resetLargeBoard() {
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      largeBoardState[row][col] = null;
+    }
+  }
+
+  const largeTokens = largeBoards.querySelectorAll(".token-large");
+  largeTokens.forEach((token) => token.remove());
+
+  winnerContainer.style.display = "none";
+  playerTurn.style.display = "flex";
+  timerSection.style.display = "flex";
+  currentPlayer = "red";
+  updatePlayerTurnText();
+  startTurnTimer();
+}

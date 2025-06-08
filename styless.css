@@ -589,4 +589,8 @@ main {
     transform: translate(-19px, -5px);
     display: block;
   }
+
+  #win-section {
+    transform: translate(9px, 604px);
+  }
 }
