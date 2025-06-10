@@ -41,6 +41,7 @@ cpuGameButton.addEventListener("click", () => {
   logoOne.style.display = "none";
   modalContent.style.display = "none";
   bottomBg.style.display = "block";
+
   startTurnTimer();
   updatePlayerTurnText();
   isVsCPU = true;
@@ -384,59 +385,9 @@ function makeCpuMove() {
   }
 }
 
-// const largeCellSize = 96;
-
-// const largeBoardState = Array.from({ length: rows }, () =>
-//   Array(cols).fill(null)
-// );
-// const largeBoards = document.getElementById("large-boards");
-
-// largeBoards.addEventListener("click", (e) => {
-//   const rect = largeBoards.getBoundingClientRect();
-//   const clickX = e.clientX - rect.left;
-//   const clickedCol = Math.floor(clickX / largeCellSize);
-
-//   if (clickedCol < 0 || clickedCol >= cols) return;
-
-//   for (let row = rows - 1; row >= 0; row--) {
-//     if (!largeBoardState[row][clickedCol]) {
-//       largeBoardState[row][clickedCol] = currentPlayer;
-
-//       const token = document.createElement("img");
-//       token.src =
-//         currentPlayer === "red"
-//           ? "assets/images/counter-red-large.svg"
-//           : "assets/images/counter-yellow-large.svg";
-//       token.classList.add("token-large");
-//       token.style.position = "absolute";
-
-//       token.style.left = `${clickedCol * largeCellSize}px`;
-//       token.style.top = `${row * largeCellSize}px`;
-
-//       const topLayer = document.getElementById("board-image-large");
-//       largeBoards.insertBefore(token, topLayer);
-
-//       currentPlayer = currentPlayer === "red" ? "yellow" : "red";
-//       updatePlayerTurnText();
-//       startTurnTimer();
-
-//       break;
-//     }
-//   }
-// });
-
-// function resetLargeBoard() {
-//   for (let row = 0; row < rows; row++) {
-//     for (let col = 0; col < cols; col++) {
-//       largeBoardState[row][col] = null;
-//     }
-//   }
-
-//   const largeTokens = largeBoards.querySelectorAll(".token-large");
-//   largeTokens.forEach((token) => token.remove());
-// }
-
 const largeCellSize = 96;
+let gameMode = "cpu";
+let cpuPlayer = "yellow";
 
 const largeBoardState = Array.from({ length: rows }, () =>
   Array(cols).fill(null)
@@ -510,6 +461,9 @@ largeBoards.addEventListener("click", (e) => {
       currentPlayer = currentPlayer === "red" ? "yellow" : "red";
       updatePlayerTurnText();
       startTurnTimer();
+      if (gameMode === "cpu" && currentPlayer === cpuPlayer) {
+        setTimeout(makeCpuMoveLarge, 500);
+      }
 
       break;
     }
@@ -567,4 +521,64 @@ function resetLargeBoard() {
   currentPlayer = "red";
   updatePlayerTurnText();
   startTurnTimer();
+}
+
+function makeCpuMoveLarge() {
+  const availableCols = [];
+
+  for (let col = 0; col < cols; col++) {
+    if (largeBoardState[0][col] === null) {
+      availableCols.push(col);
+    }
+  }
+
+  if (availableCols.length === 0) return;
+
+  const randomCol =
+    availableCols[Math.floor(Math.random() * availableCols.length)];
+
+  for (let row = rows - 1; row >= 0; row--) {
+    if (!largeBoardState[row][randomCol]) {
+      largeBoardState[row][randomCol] = currentPlayer;
+
+      const token = document.createElement("img");
+      token.src = `assets/images/counter-${currentPlayer}-large.svg`;
+      token.classList.add("token-large");
+
+      token.style.position = "absolute";
+      token.style.left = `${randomCol * largeCellSize}px`;
+      token.style.top = `${row * largeCellSize}px`;
+
+      const topLayer = document.getElementById("board-image-large");
+      largeBoards.insertBefore(token, topLayer);
+
+      if (checkLargeWinner(row, randomCol, currentPlayer)) {
+        clearInterval(timerInterval);
+
+        if (currentPlayer === "red") {
+          redWins++;
+          playerScoreOne.textContent = redWins;
+        } else {
+          yellowWins++;
+          playerScoreTwo.textContent = yellowWins;
+        }
+
+        setTimeout(() => {
+          playerTurn.style.display = "none";
+          playerOneBackground.style.display = "none";
+          playerTwoBackground.style.display = "none";
+          timerSection.style.display = "none";
+
+          winPlayer.textContent = currentPlayer === "red" ? "PLAYER 1" : "CPU";
+          winnerContainer.style.display = "flex";
+        }, 100);
+        return;
+      }
+
+      currentPlayer = currentPlayer === "red" ? "yellow" : "red";
+      startTurnTimer();
+      updatePlayerTurnText();
+      break;
+    }
+  }
 }
