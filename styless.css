@@ -550,6 +550,7 @@ main {
 
   .large-boards {
     transform: translate(10px, -154px);
+    position: relative;
   }
 
   .board-base {

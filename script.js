@@ -436,23 +436,11 @@ largeBoards.addEventListener("click", (e) => {
           timerSection.style.display = "none";
 
           winPlayer.textContent =
-            currentPlayer === "red" ? "PLAYER 1" : "PLAYER 2";
-          winnerContainer.style.display = "flex";
-        }, 100);
-        return;
-      }
-
-      if (checkLargeWinner(row, clickedCol, currentPlayer)) {
-        clearInterval(timerInterval);
-
-        setTimeout(() => {
-          playerTurn.style.display = "none";
-          playerOneBackground.style.display = "none";
-          playerTwoBackground.style.display = "none";
-          timerSection.style.display = "none";
-
-          winPlayer.textContent =
-            currentPlayer === "red" ? "PLAYER 1" : "PLAYER 2";
+            currentPlayer === "red"
+              ? "PLAYER 1"
+              : gameMode === "cpu"
+              ? "CPU"
+              : "PLAYER 2";
           winnerContainer.style.display = "flex";
         }, 100);
         return;
@@ -461,6 +449,7 @@ largeBoards.addEventListener("click", (e) => {
       currentPlayer = currentPlayer === "red" ? "yellow" : "red";
       updatePlayerTurnText();
       startTurnTimer();
+
       if (gameMode === "cpu" && currentPlayer === cpuPlayer) {
         setTimeout(makeCpuMoveLarge, 500);
       }
@@ -524,6 +513,8 @@ function resetLargeBoard() {
 }
 
 function makeCpuMoveLarge() {
+  if (gameMode !== "cpu") return;
+
   const availableCols = [];
 
   for (let col = 0; col < cols; col++) {
@@ -582,3 +573,31 @@ function makeCpuMoveLarge() {
     }
   }
 }
+
+buttonVsPlayer.addEventListener("click", () => {
+  gameMode = "player";
+
+  gameInterFace.style.display = "flex";
+  firstPageOfGame.style.display = "none";
+  logoOne.style.display = "none";
+  modalContent.style.display = "none";
+  bottomBg.style.display = "block";
+  startTurnTimer();
+  updatePlayerTurnText();
+});
+
+buttonVsCPU.addEventListener("click", () => {
+  gameMode = "cpu";
+
+  gameInterFace.style.display = "flex";
+  firstPageOfGame.style.display = "none";
+  logoOne.style.display = "none";
+  modalContent.style.display = "none";
+  bottomBg.style.display = "block";
+  startTurnTimer();
+  updatePlayerTurnText();
+
+  if (currentPlayer === cpuPlayer) {
+    setTimeout(makeCpuMoveLarge, 500);
+  }
+});
