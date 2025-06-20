@@ -385,79 +385,54 @@ function makeCpuMove() {
   }
 }
 
+const largeCols = 7;
+const largeRows = 6;
 const largeCellSize = 96;
-let gameMode = "cpu";
-let cpuPlayer = "yellow";
 
-const largeBoardState = Array.from({ length: rows }, () =>
-  Array(cols).fill(null)
+let largeCurrentPlayer = "red";
+let largeGameMode = "cpu";
+const largeCpuPlayer = "yellow";
+
+let largeRedWins = 0;
+let largeYellowWins = 0;
+let largeTimerInterval;
+
+const largeBoardState = Array.from({ length: largeRows }, () =>
+  Array(largeCols).fill(null)
 );
+
 const largeBoards = document.getElementById("large-boards");
 
-largeBoards.addEventListener("click", (e) => {
-  const rect = largeBoards.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const clickedCol = Math.floor(clickX / largeCellSize);
+function getLargeBoardOffsets() {
+  const xOffset = (largeBoards.clientWidth - largeCols * largeCellSize) / 2;
+  const yOffset = (largeBoards.clientHeight - largeRows * largeCellSize) / 2;
+  return { xOffset, yOffset };
+}
 
-  if (clickedCol < 0 || clickedCol >= cols) return;
+function placeLargeToken(col, row) {
+  const { xOffset, yOffset } = getLargeBoardOffsets();
 
-  for (let row = rows - 1; row >= 0; row--) {
-    if (!largeBoardState[row][clickedCol]) {
-      largeBoardState[row][clickedCol] = currentPlayer;
+  console.log(`Placing ${largeCurrentPlayer} token at col ${col}, row ${row}`);
 
-      const token = document.createElement("img");
-      token.src =
-        currentPlayer === "red"
-          ? "assets/images/counter-red-large.svg"
-          : "assets/images/counter-yellow-large.svg";
-      token.classList.add("token-large");
-      token.style.position = "absolute";
-      token.style.left = `${clickedCol * largeCellSize}px`;
-      token.style.top = `${row * largeCellSize}px`;
+  const left = col * largeCellSize + xOffset;
+  const top = row * largeCellSize + yOffset;
 
-      const topLayer = document.getElementById("board-image-large");
-      largeBoards.insertBefore(token, topLayer);
+  console.log(`Final token position => left: ${left}px, top: ${top}px`);
 
-      if (checkLargeWinner(row, clickedCol, currentPlayer)) {
-        clearInterval(timerInterval);
+  const token = document.createElement("img");
+  token.src = `assets/images/counter-${largeCurrentPlayer}-large.svg`;
+  token.classList.add("token-large");
+  token.style.position = "absolute";
 
-        if (currentPlayer === "red") {
-          redWins++;
-          playerScoreOne.textContent = redWins;
-        } else {
-          yellowWins++;
-          playerScoreTwo.textContent = yellowWins;
-        }
+  const centerOffset = (largeCellSize - 64) / 2;
+  token.style.left = `${col * largeCellSize + xOffset + centerOffset}px`;
+  token.style.top = `${row * largeCellSize + yOffset + centerOffset}px`;
 
-        setTimeout(() => {
-          playerTurn.style.display = "none";
-          playerOneBackground.style.display = "none";
-          playerTwoBackground.style.display = "none";
-          timerSection.style.display = "none";
+  console.log(`Final token position => left: ${left}px, top: ${top}px`);
 
-          winPlayer.textContent =
-            currentPlayer === "red"
-              ? "PLAYER 1"
-              : gameMode === "cpu"
-              ? "CPU"
-              : "PLAYER 2";
-          winnerContainer.style.display = "flex";
-        }, 100);
-        return;
-      }
-
-      currentPlayer = currentPlayer === "red" ? "yellow" : "red";
-      updatePlayerTurnText();
-      startTurnTimer();
-
-      if (gameMode === "cpu" && currentPlayer === cpuPlayer) {
-        setTimeout(makeCpuMoveLarge, 500);
-      }
-
-      break;
-    }
-  }
-});
+  const topLayer = document.getElementById("board-image-large");
+  largeBoards.insertBefore(token, topLayer);
+}
 
 function checkLargeWinner(row, col, player) {
   return (
@@ -481,9 +456,9 @@ function checkLargeDirection(row, col, player, rowDir, colDir) {
 
   while (
     r >= 0 &&
-    r < rows &&
+    r < largeRows &&
     c >= 0 &&
-    c < cols &&
+    c < largeCols &&
     largeBoardState[r][c] === player
   ) {
     count++;
@@ -495,29 +470,29 @@ function checkLargeDirection(row, col, player, rowDir, colDir) {
 }
 
 function resetLargeBoard() {
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
+  for (let row = 0; row < largeRows; row++) {
+    for (let col = 0; col < largeCols; col++) {
       largeBoardState[row][col] = null;
     }
   }
 
-  const largeTokens = largeBoards.querySelectorAll(".token-large");
-  largeTokens.forEach((token) => token.remove());
+  const tokens = largeBoards.querySelectorAll(".token-large");
+  tokens.forEach((token) => token.remove());
 
   winnerContainer.style.display = "none";
   playerTurn.style.display = "flex";
   timerSection.style.display = "flex";
-  currentPlayer = "red";
+
+  largeCurrentPlayer = "red";
   updatePlayerTurnText();
   startTurnTimer();
 }
 
 function makeCpuMoveLarge() {
-  if (gameMode !== "cpu") return;
+  if (largeGameMode !== "cpu" || largeCurrentPlayer !== largeCpuPlayer) return;
 
   const availableCols = [];
-
-  for (let col = 0; col < cols; col++) {
+  for (let col = 0; col < largeCols; col++) {
     if (largeBoardState[0][col] === null) {
       availableCols.push(col);
     }
@@ -528,76 +503,118 @@ function makeCpuMoveLarge() {
   const randomCol =
     availableCols[Math.floor(Math.random() * availableCols.length)];
 
-  for (let row = rows - 1; row >= 0; row--) {
+  for (let row = largeRows - 1; row >= 0; row--) {
     if (!largeBoardState[row][randomCol]) {
-      largeBoardState[row][randomCol] = currentPlayer;
+      largeBoardState[row][randomCol] = largeCurrentPlayer;
+      placeLargeToken(randomCol, row);
 
-      const token = document.createElement("img");
-      token.src = `assets/images/counter-${currentPlayer}-large.svg`;
-      token.classList.add("token-large");
-
-      token.style.position = "absolute";
-      token.style.left = `${randomCol * largeCellSize}px`;
-      token.style.top = `${row * largeCellSize}px`;
-
-      const topLayer = document.getElementById("board-image-large");
-      largeBoards.insertBefore(token, topLayer);
-
-      if (checkLargeWinner(row, randomCol, currentPlayer)) {
-        clearInterval(timerInterval);
-
-        if (currentPlayer === "red") {
-          redWins++;
-          playerScoreOne.textContent = redWins;
+      if (checkLargeWinner(row, randomCol, largeCurrentPlayer)) {
+        clearInterval(largeTimerInterval);
+        if (largeCurrentPlayer === "red") {
+          largeRedWins++;
+          playerScoreOne.textContent = largeRedWins;
         } else {
-          yellowWins++;
-          playerScoreTwo.textContent = yellowWins;
+          largeYellowWins++;
+          playerScoreTwo.textContent = largeYellowWins;
         }
 
         setTimeout(() => {
-          playerTurn.style.display = "none";
-          playerOneBackground.style.display = "none";
-          playerTwoBackground.style.display = "none";
-          timerSection.style.display = "none";
-
-          winPlayer.textContent = currentPlayer === "red" ? "PLAYER 1" : "CPU";
-          winnerContainer.style.display = "flex";
+          showLargeWinner();
         }, 100);
         return;
       }
 
-      currentPlayer = currentPlayer === "red" ? "yellow" : "red";
-      startTurnTimer();
+      largeCurrentPlayer = largeCurrentPlayer === "red" ? "yellow" : "red";
       updatePlayerTurnText();
+      startTurnTimer();
       break;
     }
   }
 }
 
-buttonVsPlayer.addEventListener("click", () => {
-  gameMode = "player";
+largeBoards.addEventListener("click", (e) => {
+  const rect = largeBoards.getBoundingClientRect();
+  const { xOffset } = getLargeBoardOffsets();
+  const clickX = e.clientX - rect.left - xOffset;
+  const clickedCol = Math.floor(clickX / largeCellSize);
 
-  gameInterFace.style.display = "flex";
-  firstPageOfGame.style.display = "none";
-  logoOne.style.display = "none";
-  modalContent.style.display = "none";
-  bottomBg.style.display = "block";
-  startTurnTimer();
-  updatePlayerTurnText();
+  if (clickedCol < 0 || clickedCol >= largeCols) return;
+
+  for (let row = largeRows - 1; row >= 0; row--) {
+    if (!largeBoardState[row][clickedCol]) {
+      largeBoardState[row][clickedCol] = largeCurrentPlayer;
+      placeLargeToken(clickedCol, row);
+
+      if (checkLargeWinner(row, clickedCol, largeCurrentPlayer)) {
+        clearInterval(largeTimerInterval);
+        if (largeCurrentPlayer === "red") {
+          largeRedWins++;
+          playerScoreOne.textContent = largeRedWins;
+        } else {
+          largeYellowWins++;
+          playerScoreTwo.textContent = largeYellowWins;
+        }
+
+        setTimeout(() => {
+          showLargeWinner();
+        }, 100);
+        return;
+      }
+
+      largeCurrentPlayer = largeCurrentPlayer === "red" ? "yellow" : "red";
+      updatePlayerTurnText();
+      startTurnTimer();
+
+      if (largeGameMode === "cpu" && largeCurrentPlayer === largeCpuPlayer) {
+        setTimeout(makeCpuMoveLarge, 500);
+      }
+
+      break;
+    }
+  }
 });
 
-buttonVsCPU.addEventListener("click", () => {
-  gameMode = "cpu";
+function showLargeWinner() {
+  playerTurn.style.display = "none";
+  playerOneBackground.style.display = "none";
+  playerTwoBackground.style.display = "none";
+  timerSection.style.display = "none";
 
-  gameInterFace.style.display = "flex";
+  winPlayer.textContent =
+    largeCurrentPlayer === "red"
+      ? "PLAYER 1"
+      : largeGameMode === "cpu"
+      ? "CPU"
+      : "PLAYER 2";
+  winnerContainer.style.display = "flex";
+}
+
+buttonVsPlayer.addEventListener("click", () => {
+  largeGameMode = "player";
   firstPageOfGame.style.display = "none";
+  gameInterFace.style.display = "flex";
   logoOne.style.display = "none";
   modalContent.style.display = "none";
   bottomBg.style.display = "block";
-  startTurnTimer();
-  updatePlayerTurnText();
 
-  if (currentPlayer === cpuPlayer) {
+  largeCurrentPlayer = "red";
+  updatePlayerTurnText();
+  startTurnTimer();
+});
+
+cpuGameButton.addEventListener("click", () => {
+  largeGameMode = "cpu";
+  firstPageOfGame.style.display = "none";
+  gameInterFace.style.display = "flex";
+  logoOne.style.display = "none";
+  modalContent.style.display = "none";
+  bottomBg.style.display = "block";
+
+  largeCurrentPlayer = "red";
+  updatePlayerTurnText();
+  startTurnTimer();
+
+  if (largeCurrentPlayer === largeCpuPlayer) {
     setTimeout(makeCpuMoveLarge, 500);
   }
 });

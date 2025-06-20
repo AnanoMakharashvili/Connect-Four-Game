@@ -548,12 +548,11 @@ main {
     font-size: 56px;
   }
 
-  .large-boards {
-    transform: translate(10px, -154px);
-    position: relative;
+  .board-base {
+    display: none;
   }
 
-  .board-base {
+  .board-section {
     display: none;
   }
 
@@ -580,6 +579,11 @@ main {
 
   #turn-background-yellow {
     transform: translate(1px, 607px);
+  }
+
+  #large-boards {
+    transform: translate(10px, -154px);
+    position: relative;
   }
 
   .token-large {
