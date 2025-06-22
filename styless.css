@@ -499,6 +499,14 @@ main {
   display: none;
 }
 
+#token-yellow {
+  display: none;
+}
+
+#token-red {
+  display: none;
+}
+
 @media (min-width: 1024px) {
   .header {
     gap: 204px;
@@ -581,18 +589,20 @@ main {
     transform: translate(1px, 607px);
   }
 
-  #large-boards {
-    transform: translate(10px, -154px);
-    position: relative;
+  #token-yellow {
+    display: block;
+    transform: translate(458px, 611px);
   }
 
-  .token-large {
-    width: 64px;
-    height: 64px;
-    position: absolute;
-    pointer-events: none;
-    transform: translate(-19px, -5px);
+  #token-red {
     display: block;
+    transform: translate(546px, 533px);
+  }
+
+  .large-boards {
+    position: relative;
+    transform: translate(10px, -303px);
+    height: 384px;
   }
 
   #win-section {
