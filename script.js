@@ -26,9 +26,6 @@ const cpuGameButton = document.getElementById("btn-vs-cpu");
 const boardSection = document.getElementById("board-section");
 const playerScoreOne = document.getElementById("player-score-p1");
 const playerScoreTwo = document.getElementById("player-score-p2");
-const tokenYellowLarge = document.getElementById("token-yellow");
-const tokenRedLarge = document.getElementById("token-red");
-const largeBoards = document.getElementById("large-boards");
 
 let isVsCPU = false;
 
@@ -386,4 +383,144 @@ function makeCpuMove() {
       break;
     }
   }
+}
+
+const largeRows = 6;
+const largeCols = 7;
+const largeBoardGrid = document.getElementById("large-board-grid");
+let largeBoardRedWins = 0;
+let largeBoardYellowWins = 0;
+
+const largeBoardGridState = Array.from({ length: largeRows }, () =>
+  Array(largeCols).fill(null)
+);
+
+let largeBoardCurrentPlayer = "red";
+
+function updateLargePlayerTurnText() {
+  const playerTurnText = document.getElementById("player-turn-text");
+  if (playerTurnText) {
+    playerTurnText.textContent =
+      largeBoardCurrentPlayer === "red"
+        ? "PLAYER 1's TURN (RED)"
+        : "PLAYER 2's TURN (YELLOW)";
+  }
+}
+
+function resetLargeBoard() {
+  const largeCells = document.querySelectorAll(".large-board-grid .cell");
+  largeCells.forEach((cell) => {
+    cell.classList.remove("red", "yellow");
+  });
+
+  for (let row = 0; row < largeRows; row++) {
+    for (let col = 0; col < largeCols; col++) {
+      largeBoardGridState[row][col] = null;
+    }
+  }
+
+  largeBoardCurrentPlayer = "red";
+  updateLargePlayerTurnText();
+
+  const winnerContainer = document.getElementById("winnerContainer");
+  if (winnerContainer) winnerContainer.style.display = "none";
+}
+
+for (let row = 0; row < largeRows; row++) {
+  for (let col = 0; col < largeCols; col++) {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.row = row;
+    cell.dataset.col = col;
+    largeBoardGrid.appendChild(cell);
+  }
+}
+
+largeBoardGrid.addEventListener("click", (e) => {
+  const clickedCell = e.target.closest(".cell");
+  if (!clickedCell) return;
+
+  const col = +clickedCell.dataset.col;
+
+  for (let row = largeRows - 1; row >= 0; row--) {
+    if (!largeBoardGridState[row][col]) {
+      const targetCell = document.querySelector(
+        `.cell[data-row='${row}'][data-col='${col}']`
+      );
+      targetCell.classList.add(largeBoardCurrentPlayer);
+
+      largeBoardGridState[row][col] = largeBoardCurrentPlayer;
+
+      if (checkLargeWinner(row, col, largeBoardCurrentPlayer)) {
+        if (largeBoardCurrentPlayer === "red") {
+          largeBoardRedWins++;
+          document.getElementById("playerScoreOne").textContent =
+            largeBoardRedWins;
+        } else {
+          largeBoardYellowWins++;
+          document.getElementById("playerScoreTwo").textContent =
+            largeBoardYellowWins;
+        }
+
+        const winnerContainer = document.getElementById("winnerContainer");
+        const winPlayer = document.getElementById("winPlayer");
+        if (winnerContainer && winPlayer) {
+          winnerContainer.style.display = "flex";
+          winPlayer.textContent =
+            largeBoardCurrentPlayer === "red"
+              ? "PLAYER 1 WINS!"
+              : "PLAYER 2 WINS!";
+        }
+
+        return;
+      }
+
+      largeBoardCurrentPlayer =
+        largeBoardCurrentPlayer === "red" ? "yellow" : "red";
+      updateLargePlayerTurnText();
+
+      break;
+    }
+  }
+});
+
+function checkLargeWinner(row, col, player) {
+  const horiz =
+    checkLargeDirection(row, col, player, 0, 1) +
+    checkLargeDirection(row, col, player, 0, -1) +
+    1;
+
+  const vert = checkLargeDirection(row, col, player, 1, 0) + 1;
+
+  const diag1 =
+    checkLargeDirection(row, col, player, 1, 1) +
+    checkLargeDirection(row, col, player, -1, -1) +
+    1;
+
+  const diag2 =
+    checkLargeDirection(row, col, player, 1, -1) +
+    checkLargeDirection(row, col, player, -1, 1) +
+    1;
+
+  return horiz >= 4 || vert >= 4 || diag1 >= 4 || diag2 >= 4;
+}
+
+function checkLargeDirection(row, col, player, rowDir, colDir) {
+  let count = 0;
+  let r = row + rowDir;
+  let c = col + colDir;
+
+  while (
+    r >= 0 &&
+    r < largeRows &&
+    c >= 0 &&
+    c < largeCols &&
+    largeBoardGridState[r][c] === player
+  ) {
+    count++;
+    r += rowDir;
+    c += colDir;
+  }
+
+  return count;
 }
