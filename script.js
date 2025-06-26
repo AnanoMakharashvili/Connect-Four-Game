@@ -529,3 +529,5 @@ function resetLargeBoard() {
   updateLargePlayerTurnText();
   winnerContainer.style.display = "none";
 }
+
+console.log(document.getElementById("large-turn-info"));
