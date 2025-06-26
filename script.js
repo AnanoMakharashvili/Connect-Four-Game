@@ -390,41 +390,11 @@ const largeCols = 7;
 const largeBoardGrid = document.getElementById("large-board-grid");
 let largeBoardRedWins = 0;
 let largeBoardYellowWins = 0;
+let largeBoardCurrentPlayer = "red";
 
 const largeBoardGridState = Array.from({ length: largeRows }, () =>
   Array(largeCols).fill(null)
 );
-
-let largeBoardCurrentPlayer = "red";
-
-function updateLargePlayerTurnText() {
-  const playerTurnText = document.getElementById("player-turn-text");
-  if (playerTurnText) {
-    playerTurnText.textContent =
-      largeBoardCurrentPlayer === "red"
-        ? "PLAYER 1's TURN (RED)"
-        : "PLAYER 2's TURN (YELLOW)";
-  }
-}
-
-function resetLargeBoard() {
-  const largeCells = document.querySelectorAll(".large-board-grid .cell");
-  largeCells.forEach((cell) => {
-    cell.classList.remove("red", "yellow");
-  });
-
-  for (let row = 0; row < largeRows; row++) {
-    for (let col = 0; col < largeCols; col++) {
-      largeBoardGridState[row][col] = null;
-    }
-  }
-
-  largeBoardCurrentPlayer = "red";
-  updateLargePlayerTurnText();
-
-  const winnerContainer = document.getElementById("winnerContainer");
-  if (winnerContainer) winnerContainer.style.display = "none";
-}
 
 for (let row = 0; row < largeRows; row++) {
   for (let col = 0; col < largeCols; col++) {
@@ -448,61 +418,59 @@ largeBoardGrid.addEventListener("click", (e) => {
         `.cell[data-row='${row}'][data-col='${col}']`
       );
       targetCell.classList.add(largeBoardCurrentPlayer);
-
       largeBoardGridState[row][col] = largeBoardCurrentPlayer;
 
       if (checkLargeWinner(row, col, largeBoardCurrentPlayer)) {
         if (largeBoardCurrentPlayer === "red") {
           largeBoardRedWins++;
-          document.getElementById("playerScoreOne").textContent =
-            largeBoardRedWins;
+          playerScoreOne.textContent = largeBoardRedWins;
+          bottomBg.style.display = "none";
+          footerBg.style.display = "none";
+          customBg.style.display = "block";
         } else {
           largeBoardYellowWins++;
-          document.getElementById("playerScoreTwo").textContent =
-            largeBoardYellowWins;
+          playerScoreTwo.textContent = largeBoardYellowWins;
+          bottomBg.style.display = "none";
+          footerBg.style.display = "block";
+          customBg.style.display = "none";
         }
 
-        const winnerContainer = document.getElementById("winnerContainer");
-        const winPlayer = document.getElementById("winPlayer");
-        if (winnerContainer && winPlayer) {
-          winnerContainer.style.display = "flex";
+        setTimeout(() => {
+          playerTurn.style.display = "none";
+          playerOneBackground.style.display = "none";
+          playerTwoBackground.style.display = "none";
+          timerSection.style.display = "none";
           winPlayer.textContent =
-            largeBoardCurrentPlayer === "red"
-              ? "PLAYER 1 WINS!"
-              : "PLAYER 2 WINS!";
-        }
-
+            largeBoardCurrentPlayer === "red" ? "PLAYER 1" : "PLAYER 2";
+          winnerContainer.style.display = "flex";
+        }, 100);
         return;
       }
 
       largeBoardCurrentPlayer =
         largeBoardCurrentPlayer === "red" ? "yellow" : "red";
       updateLargePlayerTurnText();
-
       break;
     }
   }
 });
 
 function checkLargeWinner(row, col, player) {
-  const horiz =
+  return (
     checkLargeDirection(row, col, player, 0, 1) +
-    checkLargeDirection(row, col, player, 0, -1) +
-    1;
-
-  const vert = checkLargeDirection(row, col, player, 1, 0) + 1;
-
-  const diag1 =
+      checkLargeDirection(row, col, player, 0, -1) +
+      1 >=
+      4 ||
+    checkLargeDirection(row, col, player, 1, 0) + 1 >= 4 ||
     checkLargeDirection(row, col, player, 1, 1) +
-    checkLargeDirection(row, col, player, -1, -1) +
-    1;
-
-  const diag2 =
+      checkLargeDirection(row, col, player, -1, -1) +
+      1 >=
+      4 ||
     checkLargeDirection(row, col, player, 1, -1) +
-    checkLargeDirection(row, col, player, -1, 1) +
-    1;
-
-  return horiz >= 4 || vert >= 4 || diag1 >= 4 || diag2 >= 4;
+      checkLargeDirection(row, col, player, -1, 1) +
+      1 >=
+      4
+  );
 }
 
 function checkLargeDirection(row, col, player, rowDir, colDir) {
@@ -521,6 +489,43 @@ function checkLargeDirection(row, col, player, rowDir, colDir) {
     r += rowDir;
     c += colDir;
   }
-
   return count;
+}
+
+function updateLargePlayerTurnText() {
+  const turnInfo = document.getElementById("large-turn-info");
+  const redBackground = document.getElementById("large-turn-background-red");
+  const yellowBackground = document.getElementById(
+    "large-turn-background-yellow"
+  );
+
+  if (!turnInfo || !redBackground || !yellowBackground) return;
+
+  if (largeBoardCurrentPlayer === "red") {
+    turnInfo.textContent = "PLAYER 1’S TURN";
+    redBackground.style.display = "block";
+    yellowBackground.style.display = "none";
+  } else {
+    turnInfo.textContent = "PLAYER 2’S TURN";
+    redBackground.style.display = "none";
+    yellowBackground.style.display = "block";
+  }
+
+  turnInfo.style.display = "flex";
+}
+
+function resetLargeBoard() {
+  document.querySelectorAll(".large-board-grid .cell").forEach((cell) => {
+    cell.classList.remove("red", "yellow");
+  });
+
+  for (let row = 0; row < largeRows; row++) {
+    for (let col = 0; col < largeCols; col++) {
+      largeBoardGridState[row][col] = null;
+    }
+  }
+
+  largeBoardCurrentPlayer = "red";
+  updateLargePlayerTurnText();
+  winnerContainer.style.display = "none";
 }
