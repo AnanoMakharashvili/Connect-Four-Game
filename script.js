@@ -530,4 +530,30 @@ function resetLargeBoard() {
   winnerContainer.style.display = "none";
 }
 
-console.log(document.getElementById("large-turn-info"));
+function startLargeTurnTimer() {
+  const largeTimerElement = document.getElementById("large-timer");
+  const largeTurnInfo = document.getElementById("large-turn-info");
+  let largeCountdown = 30;
+
+  if (largeTurnInfo) {
+    largeTurnInfo.style.display = "flex";
+  }
+
+  if (largeTimerElement) {
+    largeTimerElement.style.display = "block";
+    largeTimerElement.textContent = `${largeCountdown}s`;
+  }
+
+  clearInterval(largeTimerInterval);
+
+  largeTimerInterval = setInterval(() => {
+    largeCountdown--;
+    if (largeTimerElement) {
+      largeTimerElement.textContent = `${largeCountdown}s`;
+    }
+
+    if (largeCountdown <= 0) {
+      clearInterval(largeTimerInterval);
+    }
+  }, 1000);
+}
