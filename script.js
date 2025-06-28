@@ -294,27 +294,6 @@ function resetBoard() {
 
   winnerContainer.style.display = "none";
 
-  startTurnTimer();
-}
-
-function resetBoard() {
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      boardState[row][col] = null;
-    }
-  }
-
-  const tokens = document.querySelectorAll(".token");
-  tokens.forEach((token) => token.remove());
-
-  currentPlayer = "red";
-
-  playerTurn.style.display = "block";
-  timerSection.style.display = "block";
-  updatePlayerTurnText();
-
-  winnerContainer.style.display = "none";
-
   bottomBg.style.display = "none";
   footerBg.style.display = "none";
   customBg.style.display = "none";
@@ -450,6 +429,11 @@ largeBoardGrid.addEventListener("click", (e) => {
       largeBoardCurrentPlayer =
         largeBoardCurrentPlayer === "red" ? "yellow" : "red";
       updateLargePlayerTurnText();
+      startTurnTimer();
+      if (isVsCPU && largeBoardCurrentPlayer === "yellow") {
+        setTimeout(makeLargeCpuMove, 500);
+      }
+
       break;
     }
   }
@@ -493,25 +477,19 @@ function checkLargeDirection(row, col, player, rowDir, colDir) {
 }
 
 function updateLargePlayerTurnText() {
-  const turnInfo = document.getElementById("large-turn-info");
-  const redBackground = document.getElementById("large-turn-background-red");
-  const yellowBackground = document.getElementById(
-    "large-turn-background-yellow"
-  );
-
-  if (!turnInfo || !redBackground || !yellowBackground) return;
+  if (!playerTurn || !playerOneBackground || !playerTwoBackground) return;
 
   if (largeBoardCurrentPlayer === "red") {
-    turnInfo.textContent = "PLAYER 1’S TURN";
-    redBackground.style.display = "block";
-    yellowBackground.style.display = "none";
+    playerTurn.textContent = "PLAYER 1’S TURN";
+    playerOneBackground.style.display = "block";
+    playerTwoBackground.style.display = "none";
   } else {
-    turnInfo.textContent = "PLAYER 2’S TURN";
-    redBackground.style.display = "none";
-    yellowBackground.style.display = "block";
+    playerTurn.textContent = "PLAYER 2’S TURN";
+    playerOneBackground.style.display = "none";
+    playerTwoBackground.style.display = "block";
   }
 
-  turnInfo.style.display = "flex";
+  playerTurn.style.display = "flex";
 }
 
 function resetLargeBoard() {
@@ -530,30 +508,62 @@ function resetLargeBoard() {
   winnerContainer.style.display = "none";
 }
 
-function startLargeTurnTimer() {
-  const largeTimerElement = document.getElementById("large-timer");
-  const largeTurnInfo = document.getElementById("large-turn-info");
-  let largeCountdown = 30;
+function makeLargeCpuMove() {
+  const availableCols = [];
 
-  if (largeTurnInfo) {
-    largeTurnInfo.style.display = "flex";
+  for (let col = 0; col < largeCols; col++) {
+    if (largeBoardGridState[0][col] === null) {
+      availableCols.push(col);
+    }
   }
 
-  if (largeTimerElement) {
-    largeTimerElement.style.display = "block";
-    largeTimerElement.textContent = `${largeCountdown}s`;
+  if (availableCols.length === 0) return;
+
+  const randomCol =
+    availableCols[Math.floor(Math.random() * availableCols.length)];
+
+  for (let row = largeRows - 1; row >= 0; row--) {
+    if (!largeBoardGridState[row][randomCol]) {
+      const targetCell = document.querySelector(
+        `.cell[data-row='${row}'][data-col='${randomCol}']`
+      );
+      targetCell.classList.add(largeBoardCurrentPlayer);
+      largeBoardGridState[row][randomCol] = largeBoardCurrentPlayer;
+
+      if (checkLargeWinner(row, randomCol, largeBoardCurrentPlayer)) {
+        clearInterval(timerInterval);
+
+        if (largeBoardCurrentPlayer === "red") {
+          largeBoardRedWins++;
+          playerScoreOne.textContent = largeBoardRedWins;
+          bottomBg.style.display = "none";
+          footerBg.style.display = "none";
+          customBg.style.display = "block";
+        } else {
+          largeBoardYellowWins++;
+          playerScoreTwo.textContent = largeBoardYellowWins;
+          bottomBg.style.display = "none";
+          footerBg.style.display = "block";
+          customBg.style.display = "none";
+        }
+
+        setTimeout(() => {
+          playerTurn.style.display = "none";
+          playerOneBackground.style.display = "none";
+          playerTwoBackground.style.display = "none";
+          timerSection.style.display = "none";
+          winPlayer.textContent =
+            largeBoardCurrentPlayer === "red" ? "PLAYER 1" : "CPU";
+          winnerContainer.style.display = "flex";
+        }, 100);
+        return;
+      }
+
+      largeBoardCurrentPlayer =
+        largeBoardCurrentPlayer === "red" ? "yellow" : "red";
+      updateLargePlayerTurnText();
+      startTurnTimer();
+      break;
+    }
   }
-
-  clearInterval(largeTimerInterval);
-
-  largeTimerInterval = setInterval(() => {
-    largeCountdown--;
-    if (largeTimerElement) {
-      largeTimerElement.textContent = `${largeCountdown}s`;
-    }
-
-    if (largeCountdown <= 0) {
-      clearInterval(largeTimerInterval);
-    }
-  }, 1000);
 }
